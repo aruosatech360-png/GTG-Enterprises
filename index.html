@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>GTG Marketplace — Connect Businesses</title>
+
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="icon" href="favicon.ico">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    /* Small custom utilities + vibrant theme */
+    :root{
+      --accent-1: #7C3AED; /* vivid indigo */
+      --accent-2: #FF6B6B; /* coral */
+      --accent-3: #06B6D4; /* cyan */
+      --muted: #334155;
+    }
+    .brand-gradient {
+      background: linear-gradient(90deg,var(--accent-2) 0%, var(--accent-1) 100%);
+      box-shadow: 0 8px 28px rgba(124,58,237,0.12);
+    }
+    /* Basic slideshow */
+    .slideshow { 
+      height: 360px; 
+      position: relative;
+      overflow: hidden;
+      border-radius: 0.5rem;
+    }
+    .slide-image { transition: opacity 1s ease-in-out, transform 10s linear; }
+
+    /* Live Clock */
+    #liveClock {
+      font-size: 2rem;
+      font-weight: 700;
+      font-family: 'Courier New', monospace;
+      color: white;
+      letter-spacing: 2px;
+      text-shadow: 0 3px 16px rgba(0,0,0,0.12);
+      animation: clockGlow 2.2s ease-in-out infinite alternate;
+    }
+
+    @keyframes clockGlow {
+      from { transform: scale(1); filter: drop-shadow(0 6px 18px rgba(124,58,237,0.08)); }
+      to { transform: scale(1.02); filter: drop-shadow(0 10px 26px rgba(255,107,107,0.08)); }
+    }
+
+    /* Smooth site animations */
+    html { scroll-behavior: smooth; }
+    * { transition: all .22s cubic-bezier(.2,.9,.3,1); }
+
+    /* Buttons & interactive elements */
+    button, .categoryBtn { transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease; }
+    button:hover, .categoryBtn:hover { transform: translateY(-3px); }
+
+    /* Cards */
+    .animate-card { opacity: 0; transform: translateY(12px) scale(.995); animation: popIn .45s cubic-bezier(.2,.9,.25,1) forwards; }
+    @keyframes popIn { to { opacity: 1; transform: translateY(0) scale(1); } }
+    .card-hover { transform: translateY(0); }
+
+    /* Modal backdrop + depth */
+    .modal-fade { animation: fadeIn 0.28s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px) scale(.995); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    .bg-black\/40 { backdrop-filter: blur(6px); }
+
+    /* Product image zoom */
+    .product-img-zoom { transition: transform .5s ease; }
+    .product-img-zoom:hover { transform: scale(1.04); }
+
+    /* Toast Notification */
+    #toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translate(-50%, 150%);
+      padding: 12px 24px;
+      border-radius: 99px;
+      color: white;
+      font-weight: 500;
+    }
+    /* Active thumbnail style */
+    .thumbnail-active {
+      border-color: var(--accent-1);
+      box-shadow: 0 0 0 2px var(--accent-1);
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-50 via-pink-50 to-yellow-50 text-slate-800 antialiased">
+
+  <!-- Top Strip -->
+  <div class="w-full bg-orange-500 text-white text-sm py-2 px-4 flex justify-between">
+      <span>Sell on GTG</span>
+      <div class="flex items-center gap-6 opacity-90">
+          <span>GTG Pay</span>
+          <span>Delivery</span>
+      </div>
+  </div>
+
+  <!-- Main Header -->
+  <header class="w-full bg-white shadow-sm py-4 px-4 sticky top-0 z-40">
+      <div class="max-w-7xl mx-auto flex items-center justify-between gap-6">
+
+          <!-- Mobile Menu Button -->
+          <button id="openMenu" class="lg:hidden">
+              <i data-lucide="menu" class="w-7 h-7"></i>
+          </button>
+
+          <!-- Logo -->
+          <a href="index.html" class="flex items-center gap-3">
+            <img src="GTG Enterprises.png" alt="GTG Enterprises Logo" class="h-12">
+            <span class="font-bold text-xl hidden sm:inline">GTG Enterprises</span>
+          </a>
+
+          <!-- Search Bar -->
+          <div class="flex-1 max-w-2xl hidden lg:flex">
+              <input 
+                  id="searchInput"
+                  type="text"
+                  placeholder="Search products, brands and categories"
+                  class="flex-1 border border-gray-300 px-4 py-2 rounded-l-lg focus:outline-none"
+              />
+              <button id="searchBtn" class="bg-orange-500 text-white px-6 rounded-r-lg hover:bg-orange-600">
+                  Search
+              </button>
+          </div>
+
+          <!-- Icons -->
+          <div class="hidden lg:flex items-center gap-8">
+
+              <!-- Account -->
+              <div id="authContainer" class="relative group cursor-pointer">
+                  <div class="flex items-center gap-2">
+                      <!-- Profile Picture -->
+                      <img id="navProfilePic" 
+                           class="w-7 h-7 rounded-full border border-gray-300 object-cover"
+                           src="https://via.placeholder.com/150" alt="User profile picture">
+
+                      <span id="accountText" class="font-medium">Account</span>
+                  </div>
+
+                  <!-- Animated Dropdown -->
+                  <div id="userMenu" class="absolute right-0 top-8 w-48 bg-white shadow-md border rounded-lg opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-200 pointer-events-none group-hover:pointer-events-auto">
+                      <!-- Links will be populated by JS -->
+                  </div>
+              </div>
+
+              <!-- Help -->
+              <div class="relative group cursor-pointer">
+                  <div class="flex items-center gap-2">
+                      <i data-lucide="help-circle" class="w-5 h-5"></i>
+                      <span class="font-medium">Help</span>
+                  </div>
+
+                  <!-- Animated Dropdown -->
+                  <div class="absolute right-0 top-8 w-40 bg-white shadow-md border rounded-lg opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-200 pointer-events-none group-hover:pointer-events-auto">
+                      <a href="about.html" class="block px-4 py-2 hover:bg-gray-100">About Us</a>
+                      <a href="#contact" class="block px-4 py-2 hover:bg-gray-100">Contact Us</a>
+                  </div>
+              </div>
+
+              <!-- Cart -->
+              <button id="cartBtn" class="flex items-center gap-2 relative">
+                  <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                  <span class="font-medium">Cart</span>
+                  <span id="cartCount" class="absolute -top-2 -right-2 text-xs bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center">0</span>
+              </button>
+          </div>
+          <button id="cartBtnMobile" class="lg:hidden relative">
+            <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+            <span id="cartCountMobile" class="absolute -top-2 -right-2 text-xs bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center">0</span>
+          </button>
+      </div>
+  </header>
+
+  <!-- MOBILE SIDEBAR -->
+  <div id="sidebar" class="fixed top-0 left-0 w-64 h-full bg-white shadow-lg -translate-x-full transition-all duration-300 z-50">
+      <div class="p-4 flex justify-between items-center border-b">
+          <span class="text-xl font-bold">Menu</span>
+          <button id="closeMenu"><i data-lucide="x" class="w-6 h-6"></i></button>
+      </div>
+
+      <nav id="mobileNav" class="p-4 space-y-4">
+          <!-- Links will be populated by JS -->
+      </nav>
+  </div>
+
+  <!-- Dark Overlay for Mobile -->
+  <div id="overlay" class="fixed inset-0 bg-black bg-opacity-40 hidden z-40"></div>
+
+  <!-- HERO -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <section id="home" class="mb-8">
+      <div class="grid md:grid-cols-2 gap-6 items-center">
+        <div>
+          <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">
+            Discover products from many businesses — all in one place
+          </h1>
+          <p class="mt-4 text-lg text-slate-600">A marketplace that brings local businesses together — list products, contact sellers directly, book services and pay securely.</p>
+
+          <div class="mt-6 flex gap-3">
+            <a href="#market" class="px-5 py-3 rounded-md brand-gradient text-white font-semibold shadow">Browse marketplace</a>
+            <a href="about.html" class="px-5 py-3 rounded-md border border-indigo-200">Learn more</a>
+          </div>
+
+        </div>
+
+        <div class="relative">
+          <!-- simple slideshow -->
+          <div id="slideshow" class="slideshow rounded-lg overflow-hidden shadow-lg">
+            <img class="slide-image w-full h-full object-cover absolute inset-0" src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1400&q=60" alt="Groceries at a market">
+            <img class="slide-image w-full h-full object-cover absolute inset-0 opacity-0" src="https://images.unsplash.com/photo-1526178613552-2b45c6c302f0?auto=format&fit=crop&w=1400&q=60" alt="Local market stall">
+            <img class="slide-image w-full h-full object-cover absolute inset-0 opacity-0" src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?auto=format&fit=crop&w=1400&q=60" alt="Contactless payment">
+            <img class="slide-image w-full h-full object-cover absolute inset-0 opacity-0" src="https://images.unsplash.com/photo-1504707748692-419802cf939d?auto=format&fit=crop&w=1400&q=60" alt="Handmade crafts">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CATEGORIES -->
+    <section class="mb-6">
+      <div class="bg-gradient-to-r from-indigo-600 to-blue-600 py-3 text-center mb-2 rounded">
+        <div id="liveClock">00:00:00</div>
+      </div>
+
+      <h2 class="text-2xl font-semibold mb-4">Top Categories</h2>
+      <div class="flex gap-4 overflow-x-auto py-2">
+        <button class="categoryBtn px-4 py-2 rounded-full bg-indigo-50">All</button>
+        <button class="categoryBtn px-4 py-2 rounded-full">Electronics</button>
+        <button class="categoryBtn px-4 py-2 rounded-full">Fashion</button>
+        <button class="categoryBtn px-4 py-2 rounded-full">Home</button>
+        <button class="categoryBtn px-4 py-2 rounded-full">Services</button>
+      </div>
+    </section>
+
+    <!-- MARKET / PRODUCTS -->
+    <section id="market" class="mb-12">
+      <div class="flex justify-between items-center mb-4">
+        <div>
+          <h2 id="marketTitle" class="text-2xl font-semibold">Marketplace</h2>
+          <button id="clearFilterBtn" class="hidden text-sm text-indigo-600 hover:underline mt-1">← Back to all products</button>
+        </div>
+        <div class="text-sm text-slate-600">Showing <span id="resultCount">0</span> items</div>
+      </div>
+
+      <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- product cards inserted here by JS -->
+      </div>
+
+      <div class="mt-8 text-center">
+        <button id="loadMore" class="px-6 py-3 rounded-md border">Load more</button>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="mb-12">
+      <h2 class="text-2xl font-semibold">Contact</h2>
+      <p class="mt-4 text-slate-600">Email: <a class="text-indigo-600" href="mailto:faithadenuga17@gmail.com">faithadenuga17@gmail.com</a> | Phone: 07064643732</p>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-50 border-t py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-sm text-slate-600">
+      © <span id="year"></span> G.T.G Enterprises — Marketplace for local businesses.
+    </div>
+  </footer>
+
+  <!-- Auth Modal -->
+  <div id="authModal" class="fixed inset-0 bg-black/40 hidden flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-lg p-6 w-full max-w-md shadow-lg">
+      <h3 id="authTitle" class="text-lg font-semibold mb-4">Sign in / Sign up</h3>
+      <input id="usernameInput" class="w-full border p-2 rounded mb-3 hidden" placeholder="Choose a username" />
+      <input id="emailInput" class="w-full border p-2 rounded mb-3" placeholder="Email" />
+      <input id="passwordInput" type="password" class="w-full border p-2 rounded mb-3" placeholder="Password" />
+      <p id="usernameHint" class="text-xs text-slate-500 mb-3 hidden">3-15 chars, letters, numbers, and underscores only.</p>
+      <div id="authActions" class="flex gap-3">
+        <button id="signUpBtn" class="flex-1 px-4 py-2 bg-indigo-600 text-white rounded">Create Account</button>
+        <button id="signInBtn" class="flex-1 px-4 py-2 border rounded">Sign in</button>
+      </div>
+      <button id="closeAuth" class="mt-3 text-sm text-slate-500">Close</button>
+    </div>
+  </div>
+
+  <!-- CART SIDE PANEL -->
+  <div id="cartPanel" class="fixed right-0 top-0 h-full w-80 bg-white shadow-lg transform translate-x-full transition-transform z-50">
+    <div class="p-4">
+      <div class="flex justify-between items-center">
+        <h3 class="font-semibold">Cart</h3>
+        <button id="closeCart">Close</button>
+      </div>
+      <div id="cartItems" class="mt-4 space-y-3">
+        <!-- cart items -->
+      </div>
+      <div class="mt-4">
+        <div class="flex justify-between text-sm text-slate-600"><span>Subtotal</span><span id="cartSubtotal">₦0</span></div>
+        <button id="checkoutBtn" class="w-full mt-3 px-4 py-2 rounded brand-gradient text-white">Proceed to Pay</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCT DETAIL MODAL -->
+  <div id="productDetailModal" class="fixed inset-0 bg-black/40 hidden flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto modal-fade">
+      <div class="p-6">
+        <div class="flex justify-between items-start mb-4">
+          <h2 id="detailTitle" class="text-2xl font-bold"></h2>
+          <button id="closeDetailModal" class="text-slate-400 hover:text-slate-600">✕</button>
+        </div>
+        
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <img id="detailImage" class="w-full h-80 object-cover rounded-lg product-img-zoom mb-3" src="" alt="product">
+            <!-- Image Thumbnails -->
+            <div id="detailThumbnails" class="flex gap-2 overflow-x-auto pb-2">
+              <!-- Thumbnails injected by JS -->
+            </div>
+          </div>
+          <div>
+            <div class="mb-4">
+              <div class="text-3xl font-bold text-indigo-600">₦<span id="detailPrice">0</span></div>
+              <p class="text-sm text-slate-600 mt-1">Category: <span id="detailCategory">N/A</span></p>
+            </div>
+            
+            <div class="mb-4">
+              <h3 class="font-semibold mb-2">Description</h3>
+              <p id="detailDescription" class="text-slate-600"></p>
+            </div>
+            
+            <div class="bg-slate-50 p-4 rounded-lg mb-4">
+              <h3 class="font-semibold mb-2">Seller Information</h3>
+              <p id="detailSellerName" class="font-medium"></p>
+              <p id="detailSellerContact" class="text-sm text-indigo-600 break-all"></p>
+            </div>
+            
+            <div class="flex gap-3">
+              <button id="detailAddCart" class="flex-1 px-4 py-2 border border-indigo-600 text-indigo-600 rounded-md">Add to Cart</button>
+              <button id="detailBooking" class="flex-1 px-4 py-2 brand-gradient text-white rounded-md">Book / Pay</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SELLER ADMIN PANEL MODAL -->
+  <div id="sellerModal" class="fixed inset-0 bg-black/40 hidden flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto modal-fade">
+      <div class="p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-2xl font-bold">Add New Product</h2>
+          <button id="closeSellerModal" class="text-slate-400 hover:text-slate-600 text-2xl">✕</button>
+        </div>
+        
+        <form id="addProductForm" class="space-y-4">
+          <div>
+            <label class="block text-sm font-semibold mb-1">Product Title *</label>
+            <input id="prodTitle" type="text" class="w-full border rounded px-3 py-2" placeholder="e.g., iPhone 14 Pro" required>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-semibold mb-1">Short Description *</label>
+            <input id="prodShort" type="text" class="w-full border rounded px-3 py-2" placeholder="e.g., Brand new, sealed box" required>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-semibold mb-1">Full Description</label>
+            <textarea id="prodDescription" class="w-full border rounded px-3 py-2 h-24" placeholder="Detailed product information..."></textarea>
+          </div>
+          
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-semibold mb-1">Price (₦) *</label>
+              <input id="prodPrice" type="number" class="w-full border rounded px-3 py-2" placeholder="0" required>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold mb-1">Category *</label>
+              <select id="prodCategory" class="w-full border rounded px-3 py-2" required>
+                <option value="">Select category</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Fashion">Fashion</option>
+                <option value="Home">Home</option>
+                <option value="Services">Services</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-semibold mb-1">Seller Name *</label>
+              <input id="prodSellerName" type="text" class="w-full border rounded px-3 py-2" placeholder="Your business name" required>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold mb-1">Contact (Email/Phone) *</label>
+              <input id="prodSellerContact" type="text" class="w-full border rounded px-3 py-2" placeholder="e.g., seller@example.com or 08012345678" required>
+            </div>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-semibold mb-1">Product Image</label>
+            <input id="prodImageFile" type="file" class="w-full border rounded px-3 py-2 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" accept="image/*" multiple>
+            <p class="text-xs text-slate-500 mt-1">Optional. If not provided, a placeholder will be used.</p>
+          </div>
+          
+          <div class="flex gap-3 pt-4">
+            <button type="submit" id="submitProductBtn" class="flex-1 px-4 py-2 brand-gradient text-white rounded-md font-semibold">Add Product</button>
+            <button type="button" id="cancelSellerModal" class="flex-1 px-4 py-2 border rounded-md">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast"></div>
+
+  <!-- Firebase + App script -->
+  <script type="module">
+    // ----------------------------
+    // CONFIG: Firestore / Firebase configuration (integrated)
+    // ----------------------------
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyAt5PEavBlNw6GFciDy40nDSh9kvvU_E0o",
+      authDomain: "gtg-marketplace-3ba08.firebaseapp.com",
+      projectId: "gtg-marketplace-3ba08",
+      storageBucket: "gtg-marketplace-3ba08.firebasestorage.app",
+      messagingSenderId: "926081226792",
+      appId: "1:926081226792:web:c070e01a67d83f2951fd1d",
+      measurementId: "G-CYB96EVM4W"
+    };
+
+    // ----------------------------
+    // Initialize Firebase (modular SDK)
+    // ----------------------------
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
+    import { 
+      getFirestore, collection, addDoc, getDocs, query, where, orderBy, limit
+    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+    import {
+      getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut
+    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+    import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-storage.js";
+
+    // New imports for username functionality
+    import { updateProfile } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+    import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+    const app = initializeApp(firebaseConfig);
+    // enable Analytics (measurementId must exist in config)
+    try { const analytics = getAnalytics(app); } catch(e){ console.warn('Analytics init failed', e); }
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+    const storage = getStorage(app);
+
+    // ----------------------------
+    // UI helpers & app state
+    // ----------------------------
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const productsGrid = document.getElementById('productsGrid');
+    const resultCount = document.getElementById('resultCount');
+    const cartCountEl = document.getElementById('cartCount');
+    const cartCountMobileEl = document.getElementById('cartCountMobile');
+    const cartPanel = document.getElementById('cartPanel');
+    const cartItemsEl = document.getElementById('cartItems');
+    const cartSubtotalEl = document.getElementById('cartSubtotal');
+
+    // Current category filter
+    let currentCategory = 'All';
+    let PRODUCTS = []; // local cache
+    let cart = JSON.parse(localStorage.getItem('gtg_cart') || '[]');
+    updateCartUI();
+
+    // --- Toast Notification Helper ---
+    const toastEl = document.getElementById('toast');
+    let toastTimeout;
+    function showToast(message, isError = false) {
+      clearTimeout(toastTimeout);
+      toastEl.textContent = message;
+      toastEl.style.backgroundColor = isError ? 'var(--accent-2)' : 'var(--accent-1)';
+      toastEl.style.transform = 'translate(-50%, 0)';
+      toastTimeout = setTimeout(() => {
+        toastEl.style.transform = 'translate(-50%, 150%)';
+      }, 3000);
+    }
+
+    // --- Modal Helper ---
+    function toggleModal(modalId, show) {
+      const modal = document.getElementById(modalId);
+      const authTitle = document.getElementById('authTitle');
+      const usernameInput = document.getElementById('usernameInput');
+      const usernameHint = document.getElementById('usernameHint');
+      const signUpBtn = document.getElementById('signUpBtn');
+      const signInBtn = document.getElementById('signInBtn');
+
+      if (!modal) return;
+      modal.classList.toggle('hidden', !show);      
+
+      // Reset auth modal to default state on open
+      if (modalId === 'authModal' && show) {
+        authTitle.textContent = 'Sign in / Sign up';
+        usernameInput.classList.add('hidden');
+        usernameHint.classList.add('hidden');
+        signUpBtn.classList.remove('hidden');
+        signInBtn.textContent = 'Sign in';
+      }
+    }
+
+    // ----------------------------
+    // LIVE CLOCK
+    // ----------------------------
+    function updateClock() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('liveClock').textContent = `${hours}:${minutes}:${seconds}`;
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // ----------------------------
+    // MOBILE MENU
+    // ----------------------------
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    const openMenuBtn = document.getElementById('openMenu');
+    const closeMenuBtn = document.getElementById('closeMenu');
+
+    function toggleSidebar(show) {
+        sidebar.classList.toggle('-translate-x-full', !show);
+        overlay.classList.toggle('hidden', !show);
+    }
+
+    openMenuBtn.addEventListener('click', () => toggleSidebar(true));
+    closeMenuBtn.addEventListener('click', () => toggleSidebar(false));
+    overlay.addEventListener('click', () => toggleSidebar(false));
+
+    // ----------------------------
+    // HERO SLIDESHOW
+    // ----------------------------
+    function initSlideshow() {
+      const slideshow = document.getElementById('slideshow');
+      if (!slideshow) return;
+      const images = slideshow.querySelectorAll('.slide-image');
+      if (images.length <= 1) return;
+
+      let currentImageIndex = 0;
+      setInterval(() => {
+        images[currentImageIndex].style.opacity = '0';
+        currentImageIndex = (currentImageIndex + 1) % images.length;
+        images[currentImageIndex].style.opacity = '1';
+      }, 4000); // Change image every 4 seconds
+    }
+    initSlideshow();
+
+
+    // simple load: fetch first 12 products from Firestore
+    async function loadProducts() {
+      productsGrid.innerHTML = '<div class="col-span-full text-center py-8">Loading...</div>';
+      try {
+        const q = query(collection(db, "products"), orderBy("createdAt", "desc"), limit(12));
+        const snap = await getDocs(q);
+        PRODUCTS = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderProducts(PRODUCTS);
+      } catch (err) {
+        productsGrid.innerHTML = '<div class="col-span-full text-center text-red-600">Failed to load products. Check console.</div>';
+        console.error(err);
+      }
+    }
+
+    function renderProducts(items) {
+      if (!items.length) {
+        productsGrid.innerHTML = '<div class="col-span-full text-center py-8 text-slate-500">No products yet.</div>';
+        resultCount.textContent = 0;
+        return;
+      }
+      resultCount.textContent = items.length;
+      productsGrid.innerHTML = '';
+      for (let i = 0; i < items.length; i++) {
+        const p = items[i];
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-lg shadow p-4 flex flex-col cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-2xl animate-card';
+        card.innerHTML = `
+          <div class="h-44 rounded overflow-hidden mb-3">
+            <img src="${p.image || 'https://via.placeholder.com/600x400?text=Product'}" class="w-full h-full object-cover product-img-zoom" alt="${escapeHtml(p.title || '')}">
+          </div>
+          <h3 class="font-semibold">${escapeHtml(p.title || 'Untitled')}</h3>
+          <p class="text-sm text-slate-600 mt-1">${escapeHtml(p.short || '')}</p>
+          <div class="mt-3 flex items-center justify-between">
+            <div class="text-lg font-bold">₦${formatNumber(p.price || 0)}</div>
+            <div class="text-xs text-slate-500">Seller: <a href="#" class="sellerLink text-indigo-600 hover:underline" data-seller="${escapeHtml(p.sellerName || '')}">${escapeHtml(p.sellerName || 'Unknown')}</a></div>
+          </div>
+          <div class="mt-3 flex gap-2">
+            <button data-id="${p.id}" class="addCartBtn flex-1 px-3 py-2 rounded border">Add to cart</button>
+            <button data-id="${p.id}" class="bookBtn flex-1 px-3 py-2 rounded brand-gradient text-white">Booking / Pay</button>
+          </div>
+          <div class="mt-2 text-xs text-slate-500">Contact: ${escapeHtml(p.sellerContact || '')}</div>
+        `;
+        
+        // Click card to view details
+        card.addEventListener('click', (e) => {
+          if (e.target.closest('.addCartBtn') || e.target.closest('.bookBtn')) return;
+          showProductDetail(p);
+        });
+        
+        // stagger entrance animation
+        card.style.animationDelay = `${i * 70}ms`;
+        productsGrid.appendChild(card);
+      }
+    }
+
+    // ----------------------------
+    // Event Delegation for Product Grid
+    // ----------------------------
+    productsGrid.addEventListener('click', (e) => {
+      const target = e.target;
+      if (target.closest('.addCartBtn')) {
+        const prod = PRODUCTS.find(p => p.id === target.closest('.addCartBtn').dataset.id);
+        if (prod) addToCart(prod);
+      } else if (target.closest('.bookBtn')) {
+        const prod = PRODUCTS.find(p => p.id === target.closest('.bookBtn').dataset.id);
+        if (prod) startBookingFlow(prod);
+      } else if (target.classList.contains('sellerLink')) {
+        e.preventDefault();
+        filterBySeller(target.dataset.seller);
+      }
+    });
+
+    // ----------------------------
+    // Cart logic (local)
+    // ----------------------------
+    function addToCart(product) {
+      const existing = cart.find(i => i.id === product.id);
+      if (existing) existing.qty += 1;
+      else cart.push({ id: product.id, title: product.title, price: product.price || 0, qty: 1 });
+      localStorage.setItem('gtg_cart', JSON.stringify(cart));
+      updateCartUI();
+      showToast('✓ Added to cart');
+    }
+
+    function updateCartUI() {
+      cartCountEl.textContent = cart.reduce((s,i)=>s+i.qty,0);
+      cartCountMobileEl.textContent = cartCountEl.textContent;
+      cartItemsEl.innerHTML = '';
+      let subtotal = 0;
+      if (!cart.length) {
+        cartItemsEl.innerHTML = '<div class="text-slate-500">Your cart is empty.</div>';
+      } else {
+        for (const item of cart) {
+          subtotal += item.price * item.qty;
+          const el = document.createElement('div');
+          el.className = 'flex items-center justify-between';
+          el.innerHTML = `<div><div class="font-medium">${escapeHtml(item.title)}</div><div class="text-xs text-slate-500">Qty: ${item.qty}</div></div><div>₦${formatNumber(item.price * item.qty)}</div>`;
+          cartItemsEl.appendChild(el);
+        }
+      }
+      cartSubtotalEl.textContent = '₦' + formatNumber(subtotal);
+    }
+
+    // ----------------------------
+    // PRODUCT DETAIL VIEW
+    // ----------------------------
+    function showProductDetail(product) {
+      document.getElementById('detailTitle').textContent = product.title;
+      document.getElementById('detailPrice').textContent = formatNumber(product.price ?? 0);
+      document.getElementById('detailCategory').textContent = product.category || 'General';
+      document.getElementById('detailDescription').textContent = product.description || product.short || 'No description available.';
+      document.getElementById('detailSellerName').textContent = product.sellerName || 'Unknown Seller';
+      document.getElementById('detailSellerContact').textContent = product.sellerContact || 'N/A';
+
+      const mainImageEl = document.getElementById('detailImage');
+      const thumbnailsEl = document.getElementById('detailThumbnails');
+      
+      // Reset
+      thumbnailsEl.innerHTML = '';
+      const images = product.images && product.images.length > 0 ? product.images : [product.image];
+      mainImageEl.src = images[0] || 'https://via.placeholder.com/600x400?text=Product';
+
+      // Populate thumbnails if there's more than one image
+      if (images.length > 1) {
+        thumbnailsEl.classList.remove('hidden');
+        images.forEach((imgUrl, index) => {
+          const thumb = document.createElement('img');
+          thumb.src = imgUrl;
+          thumb.className = `w-16 h-16 object-cover rounded-md cursor-pointer border-2 border-transparent hover:border-indigo-400`;
+          if (index === 0) thumb.classList.add('thumbnail-active');
+          
+          thumb.addEventListener('click', () => {
+            mainImageEl.src = imgUrl;
+            thumbnailsEl.querySelectorAll('img').forEach(t => t.classList.remove('thumbnail-active'));
+            thumb.classList.add('thumbnail-active');
+          });
+          thumbnailsEl.appendChild(thumb);
+        });
+      } else {
+        thumbnailsEl.classList.add('hidden');
+      }
+      
+      document.getElementById('detailAddCart').onclick = () => {
+        addToCart(product);
+        toggleModal('productDetailModal', false);
+      };
+      document.getElementById('detailBooking').onclick = () => {
+        startBookingFlow(product);
+        toggleModal('productDetailModal', false);
+      };
+      
+      toggleModal('productDetailModal', true);
+    }
+
+    document.getElementById('closeDetailModal').addEventListener('click', () => {
+      toggleModal('productDetailModal', false);
+    });
+
+    // ----------------------------
+    // SELLER ADMIN PANEL
+    // ----------------------------
+    let currentUser = null; // Keep track of the logged-in user
+
+    document.getElementById('sellerBtn').addEventListener('click', () => {
+      if (currentUser) {
+        toggleModal('sellerModal', true);
+      } else {
+        showToast('Please sign in to sell products.', true);
+      }
+    });
+
+    document.getElementById('closeSellerModal').addEventListener('click', () => {
+      toggleModal('sellerModal', false);
+    });
+
+    document.getElementById('cancelSellerModal').addEventListener('click', () => {
+      toggleModal('sellerModal', false);
+    });
+
+    // --- Image Upload Helper ---
+    async function uploadImage(file) {
+      // WARNING: Do not expose your API key in a production frontend.
+      // This should be handled by a backend server to keep the key secret.
+      const IMGBB_KEY = "4803899cf28ed459a9ba85bc38eb161d";
+
+      const toBase64 = (f) => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = error => reject(error);
+        reader.readAsDataURL(f);
+      });
+
+      try {
+        const base64Image = await toBase64(file);
+        const formData = new FormData();
+        formData.append('key', IMGBB_KEY);
+        formData.append('image', base64Image);
+
+        const res = await fetch('https://api.imgbb.com/1/upload', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          return data.data.url;
+        } else {
+          throw new Error(data.error?.message || 'ImgBB upload failed.');
+        }
+      } catch (uploadError) {
+        console.error('Image upload failed:', uploadError);
+        throw new Error('Failed to upload image: ' + uploadError.message);
+      }
+    }
+
+    document.getElementById('addProductForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const submitBtn = document.getElementById('submitProductBtn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Saving...';
+
+      const newProduct = {
+        title: document.getElementById('prodTitle').value,
+        short: document.getElementById('prodShort').value,
+        description: document.getElementById('prodDescription').value,
+        price: parseFloat(document.getElementById('prodPrice').value),
+        category: document.getElementById('prodCategory').value,
+        sellerName: document.getElementById('prodSellerName').value,
+        sellerContact: document.getElementById('prodSellerContact').value, // Default
+        images: [],
+        createdAt: new Date()
+      };
+
+      try {
+        // --- Handle Image Upload ---
+        const imageFiles = document.getElementById('prodImageFile').files;
+        if (imageFiles.length > 0) {
+          submitBtn.textContent = `Uploading ${imageFiles.length} image(s)...`;
+          try {
+            const uploadPromises = [];
+            for (const file of imageFiles) {
+              uploadPromises.push(uploadImage(file));
+            }
+            const imageUrls = await Promise.all(uploadPromises);
+            newProduct.images = imageUrls;
+            newProduct.image = imageUrls[0]; // Set primary image to the first one
+          } catch (uploadError) {
+            showToast(uploadError.message, true);
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Add Product';
+            return; // Stop if upload fails
+          }
+        }
+
+        if (!newProduct.image) {
+          newProduct.image = 'https://via.placeholder.com/600x400?text=Product';
+        }
+
+        await addDoc(collection(db, 'products'), newProduct);
+        showToast('✓ Product added successfully!');
+        document.getElementById('addProductForm').reset();
+        toggleModal('sellerModal', false);
+        loadProducts();
+      } catch (err) {
+        console.error(err);
+        showToast('Failed to add product: ' + err.message, true);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Add Product';
+      }
+    });
+
+    // checkout button: create an order document in Firestore and then direct to payment gateway
+    document.getElementById('checkoutBtn').addEventListener('click', async () => {
+      if (!cart.length) return showToast('Cart is empty', true);
+      // create order doc
+      try {
+        const order = {
+          items: cart,
+          subtotal: cart.reduce((s,i)=>s+i.price*i.qty,0),
+          status: 'pending',
+          createdAt: new Date()
+        };
+        // Save an order to Firestore for record (requires proper rules)
+        const ordersCol = collection(db, 'orders');
+        await addDoc(ordersCol, order);
+        // Next: call your payment gateway to finalize the payment. Replace with your gateway SDK flow.
+        showToast('Order created. Redirecting to payment...');
+        // On successful payment, update order.status = 'paid' in Firestore.
+      } catch (err) {
+        console.error(err);
+        showToast('Failed to create order. See console.', true);
+      }
+    });
+
+    // ----------------------------
+    // Booking / Pay button (placeholder)
+    // ----------------------------
+    function startBookingFlow(product) {
+      // For services or bookings, open a small flow to collect date/time or contact then redirect to payment
+      if (confirm(`Book "${product.title}" from ${product.sellerName || 'seller'}? Click OK to create booking and proceed to payment.`)) {
+        // Create a booking doc in Firestore (example)
+        addDoc(collection(db, 'bookings'), {
+          productId: product.id,
+          productTitle: product.title,
+          seller: product.sellerName,
+          status: 'pending',
+          createdAt: new Date()
+        }).then(()=> {
+          showToast('Booking created. Redirecting to payment...');
+        }).catch(e => { console.error(e); showToast('Failed booking creation.', true); });
+      }
+    }
+
+    // ----------------------------
+    // Auth modal and handlers
+    // ----------------------------
+    document.getElementById('authContainer').addEventListener('click', ()=> {
+      if (!currentUser) {
+        toggleModal('authModal', true);
+      } 
+      // The dropdown is handled by CSS group-hover, so no JS needed to show it.
+      // This click listener is now just for opening the login modal if not signed in.
+    });
+    document.getElementById('closeAuth').addEventListener('click', ()=> toggleModal('authModal', false));
+
+    // Logic to show username field only for sign-up
+    // document.getElementById('signUpBtn').addEventListener('click', () => {
+    //   document.getElementById('authTitle').textContent = 'Create Account';
+    //   document.getElementById('usernameInput').classList.remove('hidden');
+    //   document.getElementById('usernameHint').classList.remove('hidden');
+    // });
+    document.getElementById('signUpBtn').addEventListener('click', async () => {
+      const authTitle = document.getElementById('authTitle');
+      const usernameInput = document.getElementById('usernameInput');
+      const usernameHint = document.getElementById('usernameHint');
+      
+      // If username field is hidden, this is the first click. Show it and switch to sign-up mode.
+      if (usernameInput.classList.contains('hidden')) {
+        authTitle.textContent = 'Create Account';
+        usernameInput.classList.remove('hidden');
+        usernameHint.classList.remove('hidden');
+        return; // Stop here, wait for the user to fill in the details and click again.
+      }
+
+      const username = document.getElementById('usernameInput').value.trim().toLowerCase();
+      const email = document.getElementById('emailInput').value;
+      const pass = document.getElementById('passwordInput').value;
+
+      // 1. Validate username format
+      // The username field is only visible after the first click, so we only validate if it's visible
+      if (!document.getElementById('usernameInput').classList.contains('hidden')) {
+        const usernameRegex = /^[a-z0-9_]{3,15}$/;
+        if (!usernameRegex.test(username)) {
+          return showToast('Invalid username. Use 3-15 letters, numbers, or underscores.', true);
+        }
+        if (!email || !pass) {
+          return showToast('Email and password are required.', true);
+        }
+
+      // 2. Check if username already exists in Firestore
+      // 2. Check if username already exists in Firestore (this requires read access)
+      try {
+        const usersRef = collection(db, "users");
+        const q = query(usersRef, where("username", "==", username));
+        const snap = await getDocs(q);
+
+        if (!snap.empty) {
+          return showToast("Username already taken! Please choose another.", true);
+        }
+      } catch (e) {
+        console.error("Error checking username:", e);
+        return showToast("Could not verify username. Please try again.", true);
+      }
+
+      // 3. Create Auth account and save user profile
+      try {
+        const userCred = await createUserWithEmailAndPassword(auth, email, pass);
+        const user = userCred.user;
+
+        // 4. Update Firebase Auth profile
+        await updateProfile(user, { displayName: username });
+
+        // 5. Create Firestore user document
+        // 5. Create Firestore user document (this requires create access)
+        await setDoc(doc(db, "users", user.uid), {
+            username: username,
+            email: email,
+            createdAt: new Date()
+        });
+
+        showToast('✓ Account created successfully! You are now signed in.');
+        toggleModal('authModal', false);
+      } catch (e) { 
+        console.error(e); 
+        showToast('Sign up failed: ' + e.message, true); 
+      }
+    }
+    });
+
+    document.getElementById('signInBtn').addEventListener('click', async () => {
+      const email = document.getElementById('emailInput').value;
+      const pass = document.getElementById('passwordInput').value;
+      if (!email || !pass) return showToast('Email and password are required.', true);
+
+      try {
+        await signInWithEmailAndPassword(auth, email, pass);
+        showToast('✓ Signed in successfully!');
+        toggleModal('authModal', false);
+      } catch (e) { console.error(e); showToast('Sign in failed: ' + e.message, true); }
+    });
+
+    onAuthStateChanged(auth, user => {
+      currentUser = user;
+      const accountText = document.getElementById('accountText');
+      const userMenu = document.getElementById('userMenu');
+      const navProfilePic = document.getElementById('navProfilePic');
+      const mobileNav = document.getElementById('mobileNav');
+
+      if (user) {
+        // User is signed in
+        accountText.textContent = user.displayName || 'Account';
+        navProfilePic.src = user.photoURL || 'https://via.placeholder.com/150';
+        userMenu.innerHTML = `
+          <div class="px-4 py-2 text-sm text-slate-500 border-b">Signed in as <strong class="font-medium">${escapeHtml(user.displayName || user.email)}</strong></div>
+          <a href="profile.html" class="block w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-600">My Profile</a>
+          <button id="signOutBtn" class="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-600">Sign Out</button>
+        `;
+        mobileNav.innerHTML = `
+          <a href="profile.html" class="block text-lg font-medium">My Account</a>
+          <a href="#market" class="block text-lg font-medium">Market</a>
+          <a href="about.html" class="block text-lg font-medium">About</a>
+          <a href="#contact" class="block text-lg font-medium">Contact</a>
+          <button id="logoutBtnMobile" class="w-full text-left text-lg font-medium text-red-600 mt-4">Logout</button>
+        `;
+        
+        document.getElementById('signOutBtn').addEventListener('click', (e) => {
+          e.preventDefault();
+          signOut(auth).then(() => showToast('You have been signed out.')).catch(e => showToast('Sign out failed.', true));
+        });
+        document.getElementById('logoutBtnMobile').addEventListener('click', (e) => {
+          e.preventDefault();
+          signOut(auth).then(() => showToast('You have been signed out.')).catch(e => showToast('Sign out failed.', true));
+        });
+      } else {
+        // User is signed out
+        accountText.textContent = 'Account';
+        navProfilePic.src = 'https://via.placeholder.com/150';
+        userMenu.innerHTML = '';
+        mobileNav.innerHTML = `
+          <button id="mobileLoginBtn" class="block text-lg font-medium">Login / Sign Up</button>
+          <a href="#market" class="block text-lg font-medium">Market</a>
+          <a href="about.html" class="block text-lg font-medium">About</a>
+          <a href="#contact" class="block text-lg font-medium">Contact</a>
+        `;
+        document.getElementById('mobileLoginBtn').addEventListener('click', () => {
+          toggleSidebar(false);
+          toggleModal('authModal', true);
+        });
+      }
+    });
+
+    // ----------------------------
+    // Utilities
+    // ----------------------------
+    function formatNumber(n) {
+      return (Math.round(n)).toLocaleString();
+    }
+    function escapeHtml(s){ if(!s) return ''; return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+
+    // ----------------------------
+    // CATEGORY FILTERING
+    // ----------------------------
+    document.querySelectorAll('.categoryBtn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.categoryBtn').forEach(b => b.classList.remove('bg-indigo-50', 'font-semibold'));
+        e.target.classList.add('bg-indigo-50', 'font-semibold');
+        
+        currentCategory = e.target.textContent;
+        if (currentCategory === 'All') {
+          clearAllFilters();
+        } else {
+          const filtered = PRODUCTS.filter(p => p.category === currentCategory);
+          renderProducts(filtered);
+          document.getElementById('marketTitle').textContent = `Category: ${currentCategory}`;
+          document.getElementById('clearFilterBtn').classList.remove('hidden');
+        }
+      });
+    });
+
+    function filterBySeller(sellerName) {
+      if (!sellerName) return;
+      const filtered = PRODUCTS.filter(p => p.sellerName === sellerName);
+      renderProducts(filtered);
+      document.getElementById('marketTitle').textContent = `Products by: ${sellerName}`;
+      document.getElementById('clearFilterBtn').classList.remove('hidden');
+      document.getElementById('market').scrollIntoView();
+    }
+
+    function clearAllFilters() {
+      renderProducts(PRODUCTS);
+      document.getElementById('marketTitle').textContent = 'Marketplace';
+      document.getElementById('clearFilterBtn').classList.add('hidden');
+      document.querySelectorAll('.categoryBtn').forEach(b => b.classList.remove('bg-indigo-50', 'font-semibold'));
+      document.querySelector('.categoryBtn').classList.add('bg-indigo-50', 'font-semibold');
+    }
+
+    document.getElementById('clearFilterBtn').addEventListener('click', clearAllFilters);
+
+    // ----------------------------
+    // General UI Event Listeners
+    // ----------------------------
+
+    // open/close cart
+    document.getElementById('cartBtn').addEventListener('click', () => { cartPanel.style.transform = 'translateX(0)'; });
+    document.getElementById('cartBtnMobile').addEventListener('click', () => { cartPanel.style.transform = 'translateX(0)'; });
+    document.getElementById('closeCart').addEventListener('click', () => { cartPanel.style.transform = 'translateX(100%)'; });
+
+    // Initialize
+    loadProducts();
+
+    // basic search
+    document.getElementById('searchBtn').addEventListener('click', () => {
+      const q = document.getElementById('searchInput').value.trim().toLowerCase();
+      if (!q) { clearAllFilters(); return; }
+      const filtered = PRODUCTS.filter(p => (p.title||'').toLowerCase().includes(q) || (p.short||'').toLowerCase().includes(q) || (p.sellerName||'').toLowerCase().includes(q));
+      renderProducts(filtered);
+      document.getElementById('marketTitle').textContent = `Search results for: "${q}"`;
+      document.getElementById('clearFilterBtn').classList.remove('hidden');
+    });
+
+    // load more placeholder
+    document.getElementById('loadMore').addEventListener('click', () => showToast('Load more functionality coming soon!'));
+
+    // Initialize Lucide icons
+    lucide.createIcons();
+  </script>
+</body>
+</html>

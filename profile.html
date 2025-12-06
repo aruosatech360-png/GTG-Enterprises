@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Profile — GTG Marketplace</title>
+
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="icon" href="favicon.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root{
+      --accent-1: #7C3AED;
+      --accent-2: #FF6B6B;
+    }
+    .brand-gradient {
+      background: linear-gradient(90deg,var(--accent-2) 0%, var(--accent-1) 100%);
+    }
+    html { scroll-behavior: smooth; }
+    .active-nav {
+      color: var(--accent-1);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-50 via-pink-50 to-yellow-50 text-slate-800 antialiased">
+
+  <!-- Top Strip -->
+  <div class="w-full bg-orange-500 text-white text-sm py-2 px-4 flex justify-between">
+      <span>Sell on GTG</span>
+      <div class="flex items-center gap-6 opacity-90">
+          <span>GTG Pay</span>
+          <span>Delivery</span>
+      </div>
+  </div>
+
+  <!-- Main Header -->
+  <header class="w-full bg-white shadow-sm py-4 px-4 sticky top-0 z-40">
+      <div class="max-w-7xl mx-auto flex items-center justify-between gap-6">
+
+          <!-- Mobile Menu Button -->
+          <button id="openMenu" class="lg:hidden">
+              <i data-lucide="menu" class="w-7 h-7"></i>
+          </button>
+
+          <!-- Logo -->
+          <a href="index.html" class="flex items-center gap-3">
+            <img src="GTG Enterprises.png" alt="GTG Enterprises Logo" class="h-12">
+            <span class="font-bold text-xl hidden sm:inline">GTG Enterprises</span>
+          </a>
+
+          <!-- Search Bar (dummy on this page) -->
+          <div class="flex-1 max-w-2xl hidden lg:flex">
+              <input 
+                  type="text"
+                  placeholder="Search products, brands and categories"
+                  class="flex-1 border border-gray-300 px-4 py-2 rounded-l-lg focus:outline-none"
+              />
+              <button class="bg-orange-500 text-white px-6 rounded-r-lg hover:bg-orange-600">
+                  Search
+              </button>
+          </div>
+
+          <!-- Icons -->
+          <div class="hidden lg:flex items-center gap-8">
+
+              <!-- Account -->
+              <a href="profile.html" class="relative group cursor-pointer">
+                  <div class="flex items-center gap-2">
+                      <img id="navProfilePic" class="w-7 h-7 rounded-full border border-gray-300 object-cover" src="https://via.placeholder.com/150" alt="User profile picture">
+                      <span id="accountText" class="font-medium active-nav">Account</span>
+                  </div>
+              </a>
+
+              <!-- Help -->
+              <div class="relative group cursor-pointer">
+                  <div class="flex items-center gap-2">
+                      <i data-lucide="help-circle" class="w-5 h-5"></i>
+                      <span class="font-medium">Help</span>
+                  </div>
+                  <div class="absolute right-0 top-8 w-40 bg-white shadow-md border rounded-lg opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-200 pointer-events-none group-hover:pointer-events-auto">
+                      <a href="about.html" class="block px-4 py-2 hover:bg-gray-100">About Us</a>
+                      <a href="index.html#contact" class="block px-4 py-2 hover:bg-gray-100">Contact Us</a>
+                  </div>
+              </div>
+
+              <!-- Cart -->
+              <a href="index.html#cart" class="flex items-center gap-2">
+                  <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                  <span class="font-medium">Cart</span>
+              </a>
+          </div>
+      </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="max-w-3xl mx-auto p-4">
+        <h1 class="text-3xl font-bold mb-6">My Profile</h1>
+
+        <!-- Profile Card -->
+        <div class="bg-white shadow rounded-xl p-6 flex items-center gap-6">
+            <img id="profileImage" class="w-24 h-24 rounded-full object-cover shadow bg-slate-200" src="https://via.placeholder.com/150" />
+
+            <div>
+                <div class="flex items-center gap-3">
+                    <h2 id="profileUsername" class="text-xl font-semibold">Loading...</h2>
+                    <button id="editUsernameBtn" class="text-slate-400 hover:text-indigo-600">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
+                    </button>
+                </div>
+                <p id="profileEmail" class="text-gray-600"></p>
+                <p id="profileJoinDate" class="text-gray-500 text-sm"></p>
+                <div id="usernameEditContainer" class="hidden mt-2">
+                    <input id="newUsernameInput" class="border rounded px-2 py-1 text-sm" placeholder="New username">
+                    <button id="saveUsernameBtn" class="bg-green-500 text-white px-3 py-1 text-xs rounded">Save</button>
+                    <button id="cancelUsernameBtn" class="text-gray-500 px-3 py-1 text-xs">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upload New Photo -->
+        <div class="mt-6 bg-white shadow rounded-xl p-6">
+            <label class="font-semibold">Change Profile Photo</label>
+            <input id="profilePicInput" type="file" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 mt-2" accept="image/*" />
+            <button id="uploadProfileBtn" class="mt-3 bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-semibold hover:bg-indigo-700 disabled:bg-slate-400">Upload</button>
+        </div>
+
+        <!-- Orders Section -->
+        <h2 class="text-2xl font-bold mt-10 mb-4">My Orders</h2>
+        <div id="ordersList" class="space-y-4">
+            <p>Loading orders...</p>
+        </div>
+
+        <!-- Favorites Section -->
+        <h2 class="text-2xl font-bold mt-10 mb-4">My Favorites</h2>
+        <div id="favoritesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <p>Loading favorites...</p>
+        </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-50 border-t py-6 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-sm text-slate-600 text-center">
+      © <span id="year"></span> G.T.G Enterprises — Marketplace for local businesses.
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    // Initialize Lucide icons
+    lucide.createIcons();
+  </script>
+
+  <!-- Firebase + App script -->
+  <script type="module">
+    const firebaseConfig = {
+      apiKey: "AIzaSyAt5PEavBlNw6GFciDy40nDSh9kvvU_E0o",
+      authDomain: "gtg-marketplace-3ba08.firebaseapp.com",
+      projectId: "gtg-marketplace-3ba08",
+      storageBucket: "gtg-marketplace-3ba08.firebasestorage.app",
+      messagingSenderId: "926081226792",
+      appId: "1:926081226792:web:c070e01a67d83f2951fd1d",
+      measurementId: "G-CYB96EVM4W"
+    };
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import { getFirestore, collection, query, where, getDocs, doc, getDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+    import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-storage.js";
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+    const storage = getStorage(app);
+
+    function formatNumber(n) {
+      return (Math.round(n)).toLocaleString();
+    }
+
+    onAuthStateChanged(auth, async user => {
+      if (user) {
+        // User is signed in, fetch their profile from Firestore
+        try {
+            const userDocRef = doc(db, "users", user.uid);
+            const userDocSnap = await getDoc(userDocRef);
+
+            if (userDocSnap.exists()) {
+                const data = userDocSnap.data();
+                document.getElementById("profileUsername").textContent = data.username || user.displayName || "Unknown";
+                document.getElementById("accountText").textContent = data.username || user.displayName || "Account";
+                document.getElementById("profileEmail").textContent = data.email || user.email;
+                document.getElementById("profileImage").src = data.photoURL || user.photoURL || "https://via.placeholder.com/150";
+                document.getElementById("navProfilePic").src = data.photoURL || user.photoURL || "https://via.placeholder.com/150";
+                document.getElementById("profileJoinDate").textContent = "Joined: " + data.createdAt.toDate().toLocaleDateString();
+            } else {
+                // Fallback to auth data if firestore doc doesn't exist
+                document.getElementById('profileUsername').textContent = user.displayName || 'No Username';
+                document.getElementById("accountText").textContent = user.displayName || "Account";
+                document.getElementById('profileEmail').textContent = user.email;
+                document.getElementById('profileImage').src = user.photoURL || 'https://via.placeholder.com/150';
+            }
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+        }
+        
+        // Load user's orders
+        loadUserOrders(user.uid);
+
+        // Load user's favorites
+        loadFavorites(user.uid);
+
+        // Handle profile picture upload
+        const uploadBtn = document.getElementById('uploadProfileBtn');
+        uploadBtn.addEventListener('click', async () => {
+            const fileInput = document.getElementById('profilePicInput');
+            const file = fileInput.files[0];
+            if (!file) {
+                alert("Please select a file first.");
+                return;
+            }
+
+            uploadBtn.disabled = true;
+            uploadBtn.textContent = 'Uploading...';
+
+            // Use Firebase Storage for a more secure and integrated solution
+            const filePath = `profile_pictures/${user.uid}/${file.name}`;
+            const fileRef = storageRef(storage, filePath);
+
+            try {
+                // 1. Upload the file to Firebase Storage
+                const snapshot = await uploadBytes(fileRef, file);
+                
+                // 2. Get the public URL of the uploaded file
+                const photoURL = await getDownloadURL(snapshot.ref);
+
+                // 3. Update the user's profile in Firebase Auth
+                await updateProfile(user, { photoURL: photoURL });
+
+                // 4. Update the user's document in Firestore
+                await updateDoc(doc(db, "users", user.uid), {
+                    photoURL: photoURL
+                });
+
+                document.getElementById("profileImage").src = photoURL;
+                document.getElementById("navProfilePic").src = photoURL;
+                alert("Profile picture updated successfully!");
+            } catch (error) {
+                console.error("Error updating profile picture:", error);
+                alert("Failed to update profile picture. Please try again.");
+            } finally {
+                uploadBtn.disabled = false;
+                uploadBtn.textContent = 'Upload';
+            }
+        });
+
+        // Handle username editing
+        const editBtn = document.getElementById('editUsernameBtn');
+        const saveBtn = document.getElementById('saveUsernameBtn');
+        const cancelBtn = document.getElementById('cancelUsernameBtn');
+        const editContainer = document.getElementById('usernameEditContainer');
+        const newUsernameInput = document.getElementById('newUsernameInput');
+
+        editBtn.addEventListener('click', () => {
+            editContainer.classList.remove('hidden');
+            newUsernameInput.value = document.getElementById('profileUsername').textContent;
+        });
+
+        cancelBtn.addEventListener('click', () => {
+            editContainer.classList.add('hidden');
+        });
+
+        saveBtn.addEventListener('click', async () => {
+            const newUsername = newUsernameInput.value.trim().toLowerCase();
+            const usernameRegex = /^[a-z0-9_]{3,15}$/;
+            if (!usernameRegex.test(newUsername)) {
+                return alert('Invalid username. Use 3-15 letters, numbers, or underscores.');
+            }
+
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Saving...';
+
+            try {
+                // Check if username is taken
+                const q = query(collection(db, "users"), where("username", "==", newUsername));
+                const snap = await getDocs(q);
+                if (!snap.empty) {
+                    throw new Error("Username already taken!");
+                }
+
+                // Update Auth and Firestore
+                await updateProfile(user, { displayName: newUsername });
+                await updateDoc(doc(db, "users", user.uid), { username: newUsername });
+
+                document.getElementById('profileUsername').textContent = newUsername;
+                document.getElementById('accountText').textContent = newUsername;
+                editContainer.classList.add('hidden');
+                alert('Username updated successfully!');
+
+            } catch (error) {
+                console.error("Error updating username:", error);
+                alert(error.message);
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Save';
+            }
+        });
+
+      } else {
+        // No user is signed in. Redirect to home page.
+        window.location.href = 'index.html';
+      }
+    });
+
+    async function loadUserOrders(uid) {
+        const ordersList = document.getElementById("ordersList");
+
+        const q = query(collection(db, "orders"), where("userId", "==", uid));
+        
+        try {
+            const snap = await getDocs(q);
+
+            if (snap.empty) {
+                ordersList.innerHTML = "<p class='text-gray-500'>No orders yet.</p>";
+                return;
+            }
+
+            ordersList.innerHTML = ''; // Clear loading text
+            snap.forEach(docSnap => {
+                const order = docSnap.data();
+                const item = document.createElement("div");
+                item.className = "bg-white shadow rounded p-4";
+                item.innerHTML = `
+                    <p class="font-semibold">Order ID: ${docSnap.id}</p>
+                    <p>Total: ₦${formatNumber(order.subtotal)}</p>
+                    <p>Date: ${order.createdAt.toDate().toDateString()}</p>
+                    <button class="mt-2 bg-gray-800 text-white px-4 py-1 rounded text-sm">View Details</button>
+                `;
+                ordersList.appendChild(item);
+            });
+        } catch (error) {
+            console.error("Error fetching orders: ", error);
+            ordersList.innerHTML = '<p class="text-red-500">Could not load your orders.</p>';
+        }
+    }
+
+    async function loadFavorites(uid) {
+        const favoritesGrid = document.getElementById('favoritesGrid');
+        try {
+            const userDocRef = doc(db, "users", uid);
+            const userDocSnap = await getDoc(userDocRef);
+
+            if (!userDocSnap.exists() || !userDocSnap.data().favorites || userDocSnap.data().favorites.length === 0) {
+                favoritesGrid.innerHTML = "<p class='text-gray-500'>You have no favorite items yet.</p>";
+                return;
+            }
+
+            const favoriteIds = userDocSnap.data().favorites;
+            // Fetch product details for each favorite ID
+            const productPromises = favoriteIds.map(id => getDoc(doc(db, "products", id)));
+            const productSnaps = await Promise.all(productPromises);
+
+            favoritesGrid.innerHTML = '';
+            productSnaps.forEach(prodSnap => {
+                if (prodSnap.exists()) {
+                    const p = { id: prodSnap.id, ...prodSnap.data() };
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-lg shadow p-4 flex flex-col';
+                    card.innerHTML = `
+                        <div class="h-40 rounded overflow-hidden mb-3">
+                            <img src="${p.image || 'https://via.placeholder.com/600x400?text=Product'}" class="w-full h-full object-cover" alt="${p.title || ''}">
+                        </div>
+                        <h3 class="font-semibold">${p.title || 'Untitled'}</h3>
+                        <div class="mt-2 text-lg font-bold">₦${formatNumber(p.price || 0)}</div>
+                        <a href="index.html#market" class="mt-auto pt-2 text-center w-full text-sm bg-indigo-600 text-white px-3 py-2 rounded-md">View in Market</a>
+                    `;
+                    favoritesGrid.appendChild(card);
+                }
+            });
+
+            if (favoritesGrid.innerHTML === '') {
+                 favoritesGrid.innerHTML = "<p class='text-gray-500'>Some favorite items could not be loaded.</p>";
+            }
+
+        } catch (error) {
+            console.error("Error fetching favorites:", error);
+            favoritesGrid.innerHTML = '<p class="text-red-500">Could not load your favorites.</p>';
+        }
+    }
+  </script>
+
+</body>
+</html>
