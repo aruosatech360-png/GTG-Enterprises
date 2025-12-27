@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | G.T.G Enterprises</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+</head>
+<body class="bg-gray-50 font-sans text-gray-900">
+
+    <!-- Simple Header -->
+    <header class="bg-white border-b border-gray-100 py-4">
+        <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-gradient-to-tr from-blue-500 to-cyan-400 rounded-lg flex items-center justify-center text-white">
+                    <i data-lucide="layers" class="w-5 h-5"></i>
+                </div>
+                <span class="font-bold text-lg">Checkout</span>
+            </a>
+            <a href="cart.html" class="text-sm text-gray-500 hover:text-blue-600">Back to Cart</a>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 py-12">
+        <div class="grid lg:grid-cols-2 gap-12">
+            
+            <!-- Shipping Form -->
+            <div>
+                <h2 class="text-2xl font-bold mb-6">Shipping Information</h2>
+                <!-- BACKEND DEV: This form collects user data. Hook 'submit' event to your API. -->
+                <form id="checkout-form" class="space-y-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="text-sm font-medium text-gray-700">First Name</label>
+                            <input type="text" name="firstName" required class="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-medium text-gray-700">Last Name</label>
+                            <input type="text" name="lastName" required class="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-gray-700">Email Address</label>
+                        <input type="email" id="email-address" name="email" required class="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-gray-700">Phone Number</label>
+                        <input type="tel" name="phone" required class="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-gray-700">Delivery Address</label>
+                        <input type="text" name="address" required class="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="text-sm font-medium text-gray-700">City</label>
+                            <input type="text" name="city" required class="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-medium text-gray-700">State</label>
+                            <select name="state" class="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                                <option>Lagos</option>
+                                <option>Abuja</option>
+                                <option>Rivers</option>
+                                <option>Ogun</option>
+                                <!-- Add more states -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-200 mt-8">
+                        Pay Now
+                    </button>
+                </form>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="bg-gray-50 p-8 rounded-2xl h-fit sticky top-8">
+                <h3 class="text-xl font-bold mb-6">Order Summary</h3>
+                <div id="checkout-items" class="space-y-4 mb-6 max-h-64 overflow-y-auto">
+                    <!-- Items injected via JS -->
+                </div>
+                <div class="border-t border-gray-200 pt-4 space-y-2">
+                    <div class="flex justify-between text-gray-600">
+                        <span>Subtotal</span>
+                        <span id="checkout-subtotal">₦0</span>
+                    </div>
+                    <div class="flex justify-between text-gray-600">
+                        <span>Shipping</span>
+                        <span class="text-green-600">Free</span>
+                    </div>
+                    <div class="flex justify-between text-xl font-bold text-gray-900 pt-4">
+                        <span>Total</span>
+                        <span id="checkout-total">₦0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-gray-50 py-12 text-center border-t border-gray-200">
+        <p class="text-gray-400">&copy; 2023 G.T.G Enterprises. Connecting Business. Unifying Commerce.</p>
+        <div class="mt-4 flex items-center justify-center gap-2 text-sm text-gray-400">
+            <span>Developed by</span>
+            <a href="https://github.com/aruosatech360-png" target="_blank" class="flex items-center gap-1 font-semibold text-gray-600 hover:text-blue-600 transition">
+                <img src="Aruosa Tech Icon.png" alt="Aruosa Tech" class="w-5 h-5">
+                Aruosa Tech
+            </a>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Render Cart Summary
+        const checkoutItems = document.getElementById('checkout-items');
+        let totalAmount = 0;
+
+        if(cart.length === 0) {
+            window.location.href = 'store.html'; // Redirect if empty
+        }
+
+        checkoutItems.innerHTML = cart.map(item => {
+            totalAmount += parseInt(item.price);
+            return `
+                <div class="flex gap-4 items-center">
+                    <div class="w-12 h-12 bg-white rounded-lg overflow-hidden border border-gray-200">
+                        <img src="${item.image}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-sm font-bold text-gray-900">${item.name}</p>
+                        <p class="text-xs text-gray-500">₦${item.price.toLocaleString()}</p>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        document.getElementById('checkout-subtotal').innerText = `₦${totalAmount.toLocaleString()}`;
+        document.getElementById('checkout-total').innerText = `₦${totalAmount.toLocaleString()}`;
+
+        // Handle Payment
+        document.getElementById('checkout-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email-address').value;
+
+            // Paystack Popup
+            const handler = PaystackPop.setup({
+                key: 'YOUR_PUBLIC_KEY_HERE', // BACKEND DEV: Replace with env variable or actual key
+                email: email,
+                amount: totalAmount * 100, // Kobo
+                currency: 'NGN',
+                callback: function(response) {
+                    alert('Payment Successful! Ref: ' + response.reference);
+                    // BACKEND DEV: Call your API here to save the order
+                    clearCart();
+                    window.location.href = 'index.html';
+                },
+                onClose: function() {
+                    showToast('Transaction cancelled.', 'error');
+                }
+            });
+            handler.openIframe();
+        });
+    </script>
+</body>
+</html>

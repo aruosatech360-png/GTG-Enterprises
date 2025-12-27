@@ -3,74 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>G.T.G Enterprises | Connect & Shop</title>
+    <title>Marketplace | G.T.G Enterprises</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body class="bg-gray-50 font-sans text-gray-900">
 
+    <!-- Navigation -->
     <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center gap-4">
-                <div class="flex items-center gap-2 shrink-0">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2">
                     <a href="index.html" class="flex items-center gap-2">
                         <div class="w-10 h-10 bg-gradient-to-tr from-blue-500 to-cyan-400 rounded-lg flex items-center justify-center text-white shadow-lg">
                             <i data-lucide="layers"></i>
                         </div>
-                        <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 hidden md:block">G.T.G Enterprises</span>
-                        <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 md:hidden">G.T.G</span>
+                        <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">G.T.G Enterprises</span>
                     </a>
                 </div>
-                
                 <!-- Mobile Menu Button -->
                 <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-600">
                     <i data-lucide="menu" class="w-6 h-6"></i>
                 </button>
-
-                <div class="flex-1 max-w-2xl mx-auto hidden md:block">
-                    <form action="store.html" method="GET" class="relative group">
-                        <input type="text" name="search" placeholder="Search for products, brands and categories..." 
-                               class="w-full py-2.5 pl-4 pr-12 rounded-full border border-gray-200 bg-gray-50 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all shadow-sm">
-                        <button type="submit" class="absolute right-1 top-1 bottom-1 bg-blue-600 text-white px-4 rounded-full hover:bg-blue-700 transition flex items-center justify-center">
-                            <i data-lucide="search" class="w-4 h-4"></i>
-                        </button>
-                    </form>
-                </div>
-                    <a href="login.html" class="flex items-center gap-2 text-gray-600 hover:text-blue-600 font-medium transition">
-                        <i data-lucide="user" class="w-5 h-5"></i>
-                        <span class="hidden sm:block">Account</span>
-                    </a>
-                <div class="flex items-center gap-3 sm:gap-6 shrink-0">
-                    <div class="relative group">
-                        <button class="flex items-center gap-1 text-gray-600 hover:text-blue-600 font-medium transition">
-                            <i data-lucide="help-circle" class="w-5 h-5"></i>
-                            <span class="hidden sm:block">Help</span>
-                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
-                        </button>
-                        <div class="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden hidden group-hover:block">
-                            <a href="about.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition">About Us</a>
-                            <a href="contact.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition">Contact Us</a>
-                            <a href="terms.html" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition">Terms of Service</a>
-                        </div>
-                    </div>
-
-                    
-
-                    <a href="cart.html" class="relative p-2 text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded-full transition">
+                <a href="cart.html" class="relative p-2 text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded-full transition">
                         <i data-lucide="shopping-cart" class="w-5 h-5"></i>
                         <span id="cart-count" class="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">0</span>
                     </a>
                 </div>
-            </div>
-            <!-- Mobile Search -->
-            <div class="md:hidden pb-4">
-                 <form action="store.html" method="GET" class="relative">
-                    <input type="text" name="search" placeholder="Search..." 
-                           class="w-full py-2 pl-4 pr-10 rounded-lg border border-gray-200 bg-gray-50 focus:bg-white focus:border-blue-500 outline-none transition-all">
-                    <button type="submit" class="absolute right-2 top-2 text-gray-400">
-                        <i data-lucide="search" class="w-4 h-4"></i>
-                    </button>
-                </form>
             </div>
         </div>
     </nav>
@@ -84,103 +43,82 @@
         <a href="login.html" class="block text-blue-600 font-bold">Login / Account</a>
     </div>
 
-    <!-- Hero Section -->
-    <section id="home" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+    <!-- Main Store Layout -->
+    <div class="max-w-7xl mx-auto px-4 py-8 lg:py-12">
+        <div class="flex flex-col lg:flex-row gap-8">
             
-            <!-- Sidebar Categories -->
-            <aside class="hidden lg:block bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                <ul class="text-sm text-gray-600">
-                    <li class="flex items-center px-4 py-3 hover:bg-blue-50 hover:text-blue-600 cursor-pointer transition border-b border-gray-50">
-                        <i data-lucide="utensils" class="w-4 h-4 mr-3"></i> Appliances
-                    </li>
-                    <li class="flex items-center px-4 py-3 hover:bg-blue-50 hover:text-blue-600 cursor-pointer transition border-b border-gray-50">
-                        <i data-lucide="smartphone" class="w-4 h-4 mr-3"></i> Phones & Tablets
-                    </li>
-                    <li class="flex items-center px-4 py-3 hover:bg-blue-50 hover:text-blue-600 cursor-pointer transition border-b border-gray-50">
-                        <i data-lucide="laptop" class="w-4 h-4 mr-3"></i> Computing
-                    </li>
-                    <li class="flex items-center px-4 py-3 hover:bg-blue-50 hover:text-blue-600 cursor-pointer transition border-b border-gray-50">
-                        <i data-lucide="shirt" class="w-4 h-4 mr-3"></i> Fashion
-                    </li>
-                    <li class="flex items-center px-4 py-3 hover:bg-blue-50 hover:text-blue-600 cursor-pointer transition border-b border-gray-50">
-                        <i data-lucide="gamepad-2" class="w-4 h-4 mr-3"></i> Gaming
-                    </li>
-                    <li class="flex items-center px-4 py-3 hover:bg-blue-50 hover:text-blue-600 cursor-pointer transition">
-                        <i data-lucide="more-horizontal" class="w-4 h-4 mr-3"></i> Other categories
-                    </li>
-                </ul>
+            <!-- Sidebar Filters -->
+            <aside class="w-full lg:w-64 shrink-0 space-y-8">
+                <!-- Search -->
+                <div class="relative">
+                    <input type="text" id="search-input" placeholder="Search products..." class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition">
+                    <i data-lucide="search" class="absolute left-3 top-3.5 text-gray-400 w-5 h-5"></i>
+                </div>
+
+                <!-- Categories -->
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                    <h3 class="font-bold text-lg mb-4">Categories</h3>
+                    <div class="space-y-3">
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <input type="checkbox" class="category-filter w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500" value="Electronics">
+                            <span class="text-gray-600 group-hover:text-blue-600 transition">Electronics</span>
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <input type="checkbox" class="category-filter w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500" value="Fashion">
+                            <span class="text-gray-600 group-hover:text-blue-600 transition">Fashion</span>
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <input type="checkbox" class="category-filter w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500" value="Home">
+                            <span class="text-gray-600 group-hover:text-blue-600 transition">Home & Office</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Platform Source -->
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                    <h3 class="font-bold text-lg mb-4">Platform</h3>
+                    <div class="space-y-3">
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <input type="checkbox" class="platform-filter w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500" value="Jumia">
+                            <span class="text-gray-600 group-hover:text-blue-600 transition">Jumia</span>
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <input type="checkbox" class="platform-filter w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500" value="Konga">
+                            <span class="text-gray-600 group-hover:text-blue-600 transition">Konga</span>
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <input type="checkbox" class="platform-filter w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500" value="Jiji">
+                            <span class="text-gray-600 group-hover:text-blue-600 transition">Jiji</span>
+                        </label>
+                    </div>
+                </div>
             </aside>
 
-            <!-- Main Slideshow -->
-            <section class="lg:col-span-2 relative h-[380px] bg-slate-800 rounded-xl overflow-hidden shadow-sm group">
-                <div id="hero-slideshow-container" class="absolute inset-0">
-                    <img src="stock 1.jpg" class="w-full h-full object-cover absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-100" alt="Modern living room">
-                    <img src="stock 2.jpg" class="w-full h-full object-cover absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0" alt="Luxury house exterior">
-                    <img src="stock 3.jpg" class="w-full h-full object-cover absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0" alt="Cozy bedroom">
-                    <img src="stock 4.jpg" class="w-full h-full object-cover absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0" alt="Spacious kitchen">
-                </div>
-            </section>
-
-            <!-- Right Sidebar -->
-            <section class="flex flex-col gap-4 h-[380px]">
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between flex-1">
-                    <div class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg transition cursor-pointer">
-                        <div class="p-2 border border-orange-100 bg-orange-50 rounded-full text-orange-500">
-                            <i data-lucide="phone" class="w-5 h-5"></i>
-                        </div>
-                        <div>
-                            <p class="text-xs font-bold uppercase text-gray-800">Call to Order</p>
-                            <p class="text-[10px] text-gray-500">0700-GTG-STORE</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg transition cursor-pointer">
-                        <div class="p-2 border border-blue-100 bg-blue-50 rounded-full text-blue-500">
-                            <i data-lucide="store" class="w-5 h-5"></i>
-                        </div>
-                        <div>
-                            <p class="text-xs font-bold text-gray-800">Sell on G.T.G</p>
-                            <p class="text-[10px] text-gray-500">10% Commission • Weekly Payouts</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg transition cursor-pointer">
-                        <div class="p-2 border border-green-100 bg-green-50 rounded-full text-green-500">
-                            <i data-lucide="package" class="w-5 h-5"></i>
-                        </div>
-                        <div>
-                            <p class="text-xs font-bold text-gray-800">Track Package</p>
-                            <p class="text-[10px] text-gray-500">Real-time updates</p>
-                        </div>
-                    </div>
+            <!-- Product Grid Area -->
+            <main class="flex-1">
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="text-2xl font-bold text-gray-900">All Products</h1>
+                    <span id="result-count" class="text-gray-500 text-sm">Showing all items</span>
                 </div>
 
-                <a href="premium.html" class="bg-gradient-to-br from-orange-500 to-red-500 rounded-xl p-4 text-white h-[140px] flex flex-col justify-center items-center text-center shadow-md relative overflow-hidden group cursor-pointer block">
-                    <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition"></div>
-                    <h3 class="text-2xl font-black italic relative z-10">G.T.G<span class="text-yellow-300 mx-1">★</span>PRIME</h3> 
-                    <p class="mt-3 font-bold uppercase text-xs border border-white/50 px-4 py-1.5 rounded-full hover:bg-white hover:text-orange-600 transition relative z-10">Join Now</p>
-                </a>
-            </section>
+                <!-- Grid Container -->
+                <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Products will be injected here by JS -->
+                </div>
 
+                <!-- Pagination Placeholder -->
+                <div class="mt-12 flex justify-center gap-2">
+                    <button class="px-4 py-2 border rounded-lg hover:bg-gray-50 disabled:opacity-50">Previous</button>
+                    <button class="px-4 py-2 bg-blue-600 text-white rounded-lg">1</button>
+                    <button class="px-4 py-2 border rounded-lg hover:bg-gray-50">2</button>
+                    <button class="px-4 py-2 border rounded-lg hover:bg-gray-50">3</button>
+                    <button class="px-4 py-2 border rounded-lg hover:bg-gray-50">Next</button>
+                </div>
+            </main>
         </div>
-    </section>
+    </div>
 
-    <section id="marketplace" class="py-20 max-w-7xl mx-auto px-4">
-        <div class="flex justify-between items-end mb-12">
-            <div>
-                <h2 class="text-3xl font-bold">Featured Products</h2>
-                <p class="text-gray-500">Handpicked items from top businesses</p>
-            </div>
-            <div class="flex gap-2">
-                <button class="p-2 border rounded-lg hover:bg-gray-50"><i data-lucide="filter" class="w-5 h-5"></i></button>
-            </div>
-        </div>
-
-        <!-- Dynamic Product Grid -->
-        <div id="featured-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <!-- Injected via JS -->
-        </div>
-    </section>
-
+    <!-- Product Modal -->
     <div id="product-modal" class="fixed inset-0 z-[100] hidden bg-black/70 backdrop-blur-sm flex items-center justify-center p-2 md:p-6">
         <div class="bg-white rounded-xl max-w-4xl w-full max-h-[95vh] overflow-y-auto relative shadow-2xl flex flex-col md:flex-row">
             
@@ -254,6 +192,7 @@
         </div>
     </div>
 
+    <!-- Cart Sidebar (Copied from Index for functionality) -->
     <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-96 bg-white z-[110] shadow-2xl transform translate-x-full transition-transform duration-300">
         <div class="p-6 h-full flex flex-col">
             <div class="flex justify-between items-center mb-8">
@@ -272,12 +211,13 @@
                     <i data-lucide="trash"></i> Clear Cart
                 </button>
                 <a href="checkout.html" class="w-full bg-green-500 text-white py-4 rounded-xl font-bold hover:bg-green-600 transition flex items-center justify-center gap-2">
-                    <i data-lucide="shield-check"></i> Proceed to Checkout
+                    Proceed to Checkout
                 </a>
             </div>
         </div>
     </div>
 
+    <!-- Footer -->
     <footer class="bg-gray-900 text-white py-12 text-center mt-12">
         <p class="text-gray-400">&copy; 2023 G.T.G Enterprises. Connecting Business. Unifying Commerce.</p>
         <div class="mt-4 flex items-center justify-center gap-2 text-sm text-gray-400">
@@ -291,46 +231,86 @@
 
     <script src="script.js"></script>
     <script>
-        // Slideshow Logic
-        const heroImages = document.querySelectorAll('#hero-slideshow-container img');
-        let currentHeroIndex = 0;
+        // --- Render Logic ---
+        const grid = document.getElementById('product-grid');
+        const searchInput = document.getElementById('search-input');
+        const categoryFilters = document.querySelectorAll('.category-filter');
+        const platformFilters = document.querySelectorAll('.platform-filter');
+        const resultCount = document.getElementById('result-count');
 
-        setInterval(() => {
-            heroImages[currentHeroIndex].classList.remove('opacity-100');
-            heroImages[currentHeroIndex].classList.add('opacity-0');
-            
-            currentHeroIndex = (currentHeroIndex + 1) % heroImages.length;
-            
-            heroImages[currentHeroIndex].classList.remove('opacity-0');
-            heroImages[currentHeroIndex].classList.add('opacity-100');
-        }, 5000);
-
-        // Render Featured Products (Using shared 'products' from script.js)
-        const featuredGrid = document.getElementById('featured-grid');
-        if(featuredGrid && typeof products !== 'undefined') {
-            featuredGrid.innerHTML = products.slice(0, 4).map(item => `
+        function renderProducts(items) {
+            grid.innerHTML = items.map(item => {
+                const verifiedBadge = item.isVerified ? 
+                    `<div class="absolute top-2 right-2 bg-green-600 text-white text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1 shadow-sm z-10"><i data-lucide="star" class="w-3 h-3 fill-current"></i> Verified</div>` : '';
+                
+                return `
                 <div class="bg-white rounded-2xl p-4 shadow-sm hover:shadow-xl transition-all border border-gray-100 group">
                     <div class="relative overflow-hidden rounded-xl mb-4">
                         <img src="${item.image}" alt="${item.name}" class="w-full h-48 object-cover group-hover:scale-110 transition duration-500">
-                        <div class="absolute top-2 right-2 bg-green-600 text-white text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1 shadow-sm z-10"><i data-lucide="star" class="w-3 h-3 fill-current"></i> Verified</div>
+                        <div class="absolute top-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded backdrop-blur-sm">
+                            ${item.platform}
+                        </div>
+                        ${verifiedBadge}
                         <button onclick="openModal(${item.id})" class="absolute bottom-2 right-2 bg-white/90 p-2 rounded-lg opacity-0 group-hover:opacity-100 transition">
                             <i data-lucide="maximize-2" class="w-5 h-5 text-blue-600"></i>
                         </button>
                     </div>
                     <h3 class="font-bold text-lg">${item.name}</h3>
                     <p class="text-sm text-gray-500 mb-2">${item.category}</p>
-                    <div class="flex justify-between items-center">
+                    <div class="flex justify-between items-center mt-3">
                         <span class="text-xl font-bold text-blue-600">₦${item.price.toLocaleString()}</span>
                         <button onclick="addToCart(${item.id})" class="bg-gray-900 text-white p-2 rounded-lg hover:bg-blue-600 transition">
                             <i data-lucide="plus" class="w-5 h-5"></i>
                         </button>
                     </div>
                 </div>
-            `).join('');
+            `
+            }).join('');
+            
+            resultCount.innerText = `Showing ${items.length} items`;
             lucide.createIcons();
         }
+
+        // --- Filter Logic ---
+        function filterProducts() {
+            const searchTerm = searchInput.value.toLowerCase();
+            
+            // Get checked categories
+            const checkedCategories = Array.from(categoryFilters)
+                .filter(cb => cb.checked)
+                .map(cb => cb.value);
+
+            // Get checked platforms
+            const checkedPlatforms = Array.from(platformFilters)
+                .filter(cb => cb.checked)
+                .map(cb => cb.value);
+
+            const filtered = products.filter(item => {
+                const matchesSearch = item.name.toLowerCase().includes(searchTerm);
+                const matchesCategory = checkedCategories.length === 0 || checkedCategories.includes(item.category);
+                const matchesPlatform = checkedPlatforms.length === 0 || checkedPlatforms.includes(item.platform);
+                
+                return matchesSearch && matchesCategory && matchesPlatform;
+            });
+
+            renderProducts(filtered);
+        }
+
+        // Event Listeners
+        searchInput.addEventListener('input', filterProducts);
+        categoryFilters.forEach(cb => cb.addEventListener('change', filterProducts));
+        platformFilters.forEach(cb => cb.addEventListener('change', filterProducts));
+
+        // Check URL Params for Search
+        const urlParams = new URLSearchParams(window.location.search);
+        const query = urlParams.get('search');
+        if(query) {
+            searchInput.value = query;
+        }
         
-        // Sidebar Cart UI Listener
+        // Initial Render (Trigger filter to account for URL params)
+        filterProducts();
+        
         function toggleCart() {
             document.getElementById('cart-sidebar').classList.toggle('translate-x-full');
         }
